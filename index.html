@@ -5,49 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elegant Todo</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <div class="container">
-        <header class="app-header">
-            <h1>Elegant Todo</h1>
-            <p class="tagline">Organize your day beautifully</p>
+<body class="bg-light">
+    <div class="container mt-5">
+        <header class="text-center mb-4">
+            <h1 class="display-4">Taska</h1>
+            <p class="lead">Organize your day</p>
         </header>
 
-        <div class="container">
-            <h1>My Todo List</h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-4">My Todo List</h2>
 
-            <div class="theme-selector">
-                <span>Theme: </span>
-                <button class="theme-btn blue" data-theme="blue"></button>
-                <button class="theme-btn purple" data-theme="purple"></button>
-                <button class="theme-btn green" data-theme="green"></button>
-                <button class="theme-btn dark" data-theme="dark"></button>
-            </div>
+                <!-- Theme Selector -->
+                <div class="d-flex align-items-center mb-3">
+                    <span class="me-2">Theme:</span>
+                    <button class="theme-btn blue btn btn-sm rounded-circle me-2" data-theme="blue"></button>
+                    <button class="theme-btn purple btn btn-sm rounded-circle me-2" data-theme="purple"></button>
+                    <button class="theme-btn green btn btn-sm rounded-circle me-2" data-theme="green"></button>
+                    <button class="theme-btn dark btn btn-sm rounded-circle" data-theme="dark"></button>
+                </div>
 
-            <div class="input-area">
-                <input type="text" id="new-todo" placeholder="Add new task...">
-                <button id="add-btn">+ Add</button>
-            </div>
+                <!-- Input Area -->
+                <div class="input-group mb-3">
+                    <input type="text" id="new-todo" class="form-control" placeholder="Add new task...">
+                    <button id="add-btn" class="btn btn-primary">+ Add</button>
+                </div>
 
-            <div class="filters">
-                <button class="filter active" data-filter="all">All</button>
-                <button class="filter" data-filter="active">Active</button>
-                <button class="filter" data-filter="completed">Completed</button>
-            </div>
+                <!-- Filters -->
+                <div class="d-flex justify-content-center mb-3">
+                    <button class="filter btn btn-outline-secondary me-2 active" data-filter="all">All</button>
+                    <button class="filter btn btn-outline-secondary me-2" data-filter="active">Active</button>
+                    <button class="filter btn btn-outline-secondary" data-filter="completed">Completed</button>
+                </div>
 
-            <ul id="todo-list"></ul>
+                <!-- Todo List -->
+                <ul id="todo-list" class="list-group mb-3"></ul>
 
-            <div class="footer">
-                <span id="item-count">0 items</span>
-                <button id="clear-completed">Clear Completed</button>
+                <!-- Footer -->
+                <div class="d-flex justify-content-between">
+                    <span id="item-count">0 items</span>
+                    <button id="clear-completed" class="btn btn-link text-decoration-none">Clear Completed</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <script src="script.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js" type="module"></script>
 </body>
 
 </html>

@@ -1,154 +1,105 @@
-// DOM Elements
-const newTodoInput = document.getElementById('new-todo');
-const addBtn = document.getElementById('add-btn');
-const todoList = document.getElementById('todo-list');
-const filters = document.querySelectorAll('.filter');
-const clearCompletedBtn = document.getElementById('clear-completed');
-const itemCount = document.getElementById('item-count');
-const themeButtons = document.querySelectorAll('.theme-btn');
+import { getTodos, completeTodo, uncompleteTodo} from "./api/api.js";
 
-// State
-let todos = JSON.parse(localStorage.getItem('todos')) || [];
-let currentFilter = 'all';
+function displayTodos(todos) {
+    const todolist = document.getElementById("todo-list");
+    todolist.innerHTML = "";
 
-// Initialize
-renderTodos();
-updateCount();
-
-// Event Listeners
-addBtn.addEventListener('click', addTodo);
-newTodoInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addTodo();
-});
-
-filters.forEach(filter => {
-    filter.addEventListener('click', () => {
-        filters.forEach(f => f.classList.remove('active'));
-        filter.classList.add('active');
-        currentFilter = filter.dataset.filter;
-        renderTodos();
-    });
-});
-
-clearCompletedBtn.addEventListener('click', clearCompleted);
-
-themeButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        document.body.className = button.dataset.theme;
-        localStorage.setItem('theme', button.dataset.theme);
-    });
-});
-
-// Load saved theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    document.body.className = savedTheme;
-}
-
-// Functions
-function addTodo() {
-    const text = newTodoInput.value.trim();
-    if (text) {
-        todos.push({
-            id: Date.now(),
-            text,
-            completed: false
-        });
-        saveTodos();
-        renderTodos();
-        newTodoInput.value = '';
-        updateCount();
-    }
-}
-
-function renderTodos() {
-    todoList.innerHTML = '';
-    
-    const filteredTodos = todos.filter(todo => {
-        if (currentFilter === 'active') return !todo.completed;
-        if (currentFilter === 'completed') return todo.completed;
-        return true;
-    });
-    
-    if (filteredTodos.length === 0) {
-        const empty = document.createElement('li');
-        empty.textContent = 'No todos found';
-        empty.style.textAlign = 'center';
-        empty.style.padding = '20px';
-        empty.style.color = '#666';
-        todoList.appendChild(empty);
+    if (!Array.isArray(todos)) {
+        console.error("Invalid todos data:", todos);
+        todolist.innerHTML = "<li>Error loading todos</li>";
         return;
     }
-    
-    filteredTodos.forEach(todo => {
-        const li = document.createElement('li');
-        li.className = 'todo-item';
-        if (todo.completed) li.classList.add('completed');
-        
-        li.innerHTML = `
-            <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</span>
-            <div class="todo-actions">
-                <button class="complete-btn" data-id="${todo.id}">✓</button>
-                <button class="edit-btn" data-id="${todo.id}">Edit</button>
-                <button class="delete-btn" data-id="${todo.id}">X</button>
-            </div>
-        `;
-        
-        todoList.appendChild(li);
-    });
-    
-    // Add event listeners to new buttons
-    document.querySelectorAll('.complete-btn').forEach(btn => {
-        btn.addEventListener('click', () => toggleComplete(btn.dataset.id));
-    });
-    
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => editTodo(btn.dataset.id));
-    });
-    
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => deleteTodo(btn.dataset.id));
+
+    todos.forEach(todo => {
+        const todoItem = document.createElement("li");
+        todoItem.dataset.id = todo.id; // Add data-id attribute to the <li> element
+        todoItem.innerHTML = `
+        <input type="checkbox" class="form-check-input me-3 complete-checkbox" ${todo.completed ? 'checked' : ''}>
+        <div class="flex-grow-1 ${todo.completed ? 'text-decoration-line-through text-muted' : ''}">
+            <strong>${todo.Title}</strong><br>
+            <small class="text-muted">Created At: ${new Date(todo.createdAt).toLocaleString()}</small>
+        </div>
+        <button class="edit-btn btn btn-sm btn-warning me-2" data-id="${todo.id}">Edit</button>
+        <button class="delete-btn btn btn-sm btn-danger" data-id="${todo.id}">Delete</button>
+    `;
+        todolist.appendChild(todoItem);
     });
 }
 
-function toggleComplete(id) {
-    todos = todos.map(todo => 
-        todo.id == id ? {...todo, completed: !todo.completed} : todo
-    );
-    saveTodos();
-    renderTodos();
-    updateCount();
+function createTodo(todo) {
+    const todoItem = document.createElement("li");
+    todoItem.dataset.id = todo.id; // Add data-id attribute to the <li> element
+    todoItem.innerHTML = `
+    <input type="checkbox" class="form-check-input me-3 complete-checkbox" ${todo.completed ? 'checked' : ''}>
+    <div class="flex-grow-1 ${todo.completed ? 'text-decoration-line-through text-muted' : ''}">
+        <strong>${todo.Title}</strong><br>
+        <small class="text-muted">Created At: ${new Date(todo.createdAt).toLocaleString()}</small>
+    </div>
+    <button class="edit-btn btn btn-sm btn-warning me-2" data-id="${todo.id}">Edit</button>
+    <button class="delete-btn btn btn-sm btn-danger" data-id="${todo.id}">Delete</button>
+`;
+    return todoItem;
 }
 
-function editTodo(id) {
-    const todo = todos.find(t => t.id == id);
-    const newText = prompt('Edit your todo:', todo.text);
-    if (newText !== null && newText.trim() !== '') {
-        todo.text = newText.trim();
-        saveTodos();
-        renderTodos();
+function addTodoToList(todo) {
+    const todoItem = createTodo(todo);
+    const todolist = document.getElementById("todo-list");
+    todolist.appendChild(todoItem);
+}
+
+document.getElementById("add-btn").addEventListener("click", () => {
+    const inputField = document.getElementById("new-todo");
+    const title = inputField.value.trim();
+
+    if (!title) {
+        alert("Please enter a todo title.");
+        return;
     }
-}
 
-function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id != id);
-    saveTodos();
-    renderTodos();
-    updateCount();
-}
+    const todo = {
+        Title: title,
+        createdAt: new Date().toISOString(),
+        completed: false,
+    };
 
-function clearCompleted() {
-    todos = todos.filter(todo => !todo.completed);
-    saveTodos();
-    renderTodos();
-    updateCount();
-}
+    addTodoToList(todo);
+    inputField.value = "";
+});
 
-function updateCount() {
-    const activeCount = todos.filter(todo => !todo.completed).length;
-    itemCount.textContent = `${activeCount} ${activeCount === 1 ? 'item' : 'items'}`;
-}
+// Fetch and display todos on page load
+getTodos().then(displayTodos).catch(error => {
+    console.error("Error fetching todos:", error);
+});
 
-function saveTodos() {
-    localStorage.setItem('todos', JSON.stringify(todos));
-}
+document.getElementById('clear-completed').addEventListener('click', () => {
+    getCompletedTodos().then(completedTodos => {
+        const deleteAllCompleted = completedTodos.map(todo => deleteTodo(todo.id));
+        Promise.all(deleteAllCompleted)
+            .then(() => getTodos())
+            .then(displayTodos)
+            .catch(error => console.error('Error clearing completed todos:', error));
+    });
+});
+
+document.addEventListener('change', (event) => {
+    if (event.target.classList.contains('complete-checkbox')) {
+        const checkbox = event.target;
+        const todoItem = checkbox.closest('li');
+        const todoId = todoItem.dataset.id;
+        const isCompleted = checkbox.checked;
+        const updateTodoStatus = isCompleted ? completeTodo : uncompleteTodo;
+
+        updateTodoStatus(todoId)
+            .then(() => {
+                const textDiv = todoItem.querySelector('div');
+                if (isCompleted) {
+                    textDiv.classList.add('text-decoration-line-through', 'text-muted');
+                } else {
+                    textDiv.classList.remove('text-decoration-line-through', 'text-muted');
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating todo:', error);
+            });
+    }
+});
