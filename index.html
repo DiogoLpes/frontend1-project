@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Todo</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>Elegant Todo</h1>
+            <p class="tagline">Organize your day beautifully</p>
+        </header>
+
+        <div class="container">
+            <h1>My Todo List</h1>
+
+            <div class="theme-selector">
+                <span>Theme: </span>
+                <button class="theme-btn blue" data-theme="blue"></button>
+                <button class="theme-btn purple" data-theme="purple"></button>
+                <button class="theme-btn green" data-theme="green"></button>
+                <button class="theme-btn dark" data-theme="dark"></button>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="new-todo" placeholder="Add new task...">
+                <button id="add-btn">+ Add</button>
+            </div>
+
+            <div class="filters">
+                <button class="filter active" data-filter="all">All</button>
+                <button class="filter" data-filter="active">Active</button>
+                <button class="filter" data-filter="completed">Completed</button>
+            </div>
+
+            <ul id="todo-list"></ul>
+
+            <div class="footer">
+                <span id="item-count">0 items</span>
+                <button id="clear-completed">Clear Completed</button>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+</body>
+
+</html>
