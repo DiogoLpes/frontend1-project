@@ -134,8 +134,8 @@ h1 {
 }
 
 .edit-btn {
-  background: #ff9800;
-  color: white;
+  background: #ffffff;
+  color: #4361ee;
 }
 
 .delete-btn {
@@ -179,12 +179,14 @@ h1 {
 
 /* Update the button styles to match Bootstrap */
 .edit-btn {
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background: #ffffff;
+  color: #4361ee;
+  border: none;
 }
 
 .delete-btn {
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background: #ffffff;
+  color: red;
+  border: none;
 }
 
