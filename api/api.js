@@ -59,7 +59,7 @@ export async function deleteTodo(id) {
 
 export async function completeTodo(id) {
     const response = await fetch(Todo_Api + id, {
-        method: "PATCH",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
@@ -71,7 +71,7 @@ export async function completeTodo(id) {
 
 export async function uncompleteTodo(id) {
     const response = await fetch(Todo_Api + id, {
-        method: "PATCH",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },

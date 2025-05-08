@@ -11,32 +11,45 @@ function displayTodos(todos) {
     const todolist = document.getElementById("todo-list");
     todolist.innerHTML = "";
     todos.forEach(todo => {
-        const todoItem = createTodo(todo); // Use the standalone createTodo function
+        const todoItem = createTodoElement(todo); // Use the standalone createTodo function
         todolist.appendChild(todoItem);
     });
+    updateItemCount(); 
 }
-
 
 function createTodoElement(todo) {
     const todoItem = document.createElement("li");
-    todoItem.dataset.id = todo.id; // Add data-id attribute to the <li> element
-    todoItem.className = "list-group-item d-flex align-items-center justify-content-between"; // Add Bootstrap classes
+    todoItem.dataset.id = todo.id;
+    todoItem.className = "list-group-item d-flex align-items-center justify-content-between";
     todoItem.innerHTML = `
         <input type="checkbox" class="form-check-input me-3 complete-checkbox" ${todo.completed ? 'checked' : ''}>
-        <div class="flex-grow-1 ${todo.completed ? 'text-decoration-line-through text-muted' : ''}">
-            <strong>${todo.Title}</strong><br>
+        <div class="flex-grow-1">
+            <strong class="${todo.completed ? 'text-decoration-line-through text-muted' : ''}">${todo.Title}</strong><br>
             <small class="text-muted">Created At: ${new Date(todo.createdAt).toLocaleString()}</small>
         </div>
-        <button class="edit-btn btn btn-sm btn-warning me-2" data-id="${todo.id}">Edit</button>
-        <button class="delete-btn btn btn-sm btn-danger" data-id="${todo.id}">Delete</button>
+        <button class="edit-btn btn btn-sm btn-warning me-2" data-id="${todo.id}">
+            <i class="bi bi-pencil"></i> <!-- Ícone de caneta -->
+        </button>
+        <button class="delete-btn btn btn-sm btn-danger" data-id="${todo.id}">
+            <i class="bi bi-trash"></i> <!-- Ícone de lixo -->
+        </button>
     `;
     return todoItem;
 }
+
 
 function addTodoToList(todo) {
     const todoItem = createTodoElement(todo);
     const todolist = document.getElementById("todo-list");
     todolist.appendChild(todoItem);
+    updateItemCount(); // Update item count after adding a todo
+}
+
+function updateItemCount() {
+    const todolist = document.getElementById("todo-list");
+    const itemCount = todolist.childElementCount; 
+    const itemCountSpan = document.getElementById("item-count");
+    itemCountSpan.textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`; 
 }
 
 
@@ -68,6 +81,7 @@ document.addEventListener('click', (event) => {
         deleteTodo(todoId)
             .then(() => {
                 todoItem.remove();
+                updateItemCount(); // Update item count after deleting a todo
             })
             .catch((error) => {
                 console.error('Error deleting todo:', error);
@@ -121,7 +135,7 @@ document.addEventListener('click', (event) => {
                 .catch((error) => {
                     console.error("Error updating todo:", error);
                 });
-        }, { once: true }); // Garante que o evento de salvar seja executado apenas uma vez
+        }, { once: true });
     }
 });
 
@@ -135,18 +149,18 @@ document.addEventListener('change', (event) => {
 
         updateTodoStatus(todoId)
             .then(() => {
-                const textDiv = todoItem.querySelector('div');
+                const titleElement = todoItem.querySelector('strong');
                 if (isCompleted) {
-                    textDiv.classList.add('text-decoration-line-through', 'text-muted');
+                    titleElement.classList.add('text-decoration-line-through', 'text-muted');
                 } else {
-                    textDiv.classList.remove('text-decoration-line-through', 'text-muted');
+                    titleElement.classList.remove('text-decoration-line-through', 'text-muted');
                 }
             })
             .catch((error) => {
                 console.error('Error updating todo:', error);
+                alert('Failed to update the todo status. Please try again.');
+                checkbox.checked = !isCompleted;
             });
-
-
     }
 });
 

@@ -1,0 +1,15 @@
+{   
+    "name": "Taska",
+    "short_name": "Taska",
+    "start_url": "/frontend1-project/index.html",
+    "display": "standalone",
+    "background_color": "#333",
+    "theme_color": "#f8f9fa",
+    "icons": [
+
+        {
+            "src": "favicon.png",
+            "sizes": "any"
+        }
+    ]
+}
