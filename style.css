@@ -1,4 +1,3 @@
-/* Modern Todo App Styles */
 body {
     background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,7 +30,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Completed task styling */
 .completed-task {
     opacity: 0.8;
     background-color: #f8f9fa;
@@ -42,7 +40,7 @@ body {
     color: #6c757d;
 }
 
-/* Editing state */
+
 .edit-input {
     border: none;
     background: transparent;
@@ -53,7 +51,6 @@ body {
     outline: none;
 }
 
-/* Priority indicators */
 .border-start.border-danger {
     border-left: 4px solid #dc3545 !important;
 }
@@ -92,4 +89,35 @@ body {
         width: 100%;
         margin-top: 0.5rem;
     }
+}
+
+.filter.active {
+    background-color: #0d6efd;
+    color: white !important;
+}
+
+#clock {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 1.5rem; /* Larger font size */
+    font-weight: 600;
+    color: #0d6efd; /* Matching your primary color */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #0d6efd;
+  
+}
+
+/* Add focus styles for better accessibility */
+button:focus {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+/* Hide decorative icons from screen readers */
+.bi-pencil, .bi-trash, .bi-plus-lg, .bi-clock, .bi-calendar {
+    pointer-events: none;
 }
