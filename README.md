@@ -49,4 +49,4 @@ PWA Configuration
 Service worker setup
 
 Portfolio Presentation
-Featured on: https://nelsonzarate.github.io/NelsonZarate_portfolio/
+Featured on:  https://diogolpes.github.io/web_pages-portfolio/
